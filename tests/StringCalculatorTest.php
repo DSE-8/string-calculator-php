@@ -55,4 +55,17 @@ final class StringCalculatorTest extends TestCase
 
         assertEquals(20,$sum);
     }
+    /**
+     * @test
+     */
+    public function customValidSeparators(){
+        $sum = $this->stringCalculator->add("//;\n3;10");
+
+        assertEquals(13,$sum);
+    }
 }
+/*
+4. Soporta diferentes delimitadores
+    * Para cambiar un delimitador, el comienzo del string debe contener una línea separada que sea como esta: "//[delimitador]\n[números...]". Por ejemplo: "//;\n1;2" debe dar como resultado 3 donde el delimitador por defecto es ";".
+    * La primera línea es opcional. Todos los escenarios existentes hasta ahora, deben estar soportados.
+*/

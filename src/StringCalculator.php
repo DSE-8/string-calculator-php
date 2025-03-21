@@ -4,9 +4,16 @@ namespace Deg540\StringCalculatorPHP;
 
 class StringCalculator
 {
-    public function add(string $numbers): int{
+    public function add(string $Expresion): int{
         $sum = 0;
-        $numbersArray = preg_split("/[\n,]+/",$numbers);
+        $delimiters = "\n,";
+        $numbers = $Expresion;
+        if(preg_match("/\/\/.+\n.*/",$Expresion)){
+            $delimitersAndNumbersArray = explode("\n",$Expresion);
+            $delimiters = trim($delimitersAndNumbersArray[0],"/");
+            $numbers = $delimitersAndNumbersArray[1] ;
+        } 
+        $numbersArray = preg_split("/[".$delimiters."]+/",$numbers);
         foreach($numbersArray as $number){
             $sum += (int) $number;
         } 
