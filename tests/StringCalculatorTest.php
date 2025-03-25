@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Deg540\StringCalculatorPHP\Test;
 
 use Deg540\StringCalculatorPHP\StringCalculator;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 use function PHPUnit\Framework\assertEquals;
 
 final class StringCalculatorTest extends TestCase
@@ -50,7 +52,7 @@ final class StringCalculatorTest extends TestCase
     /**
      * @test
      */
-    public function lineJumpIsValidSeparator(){
+    public function linebreakIsValidSeparator(){
         $sum = $this->stringCalculator->add("2,5\n3\n10");
 
         assertEquals(20,$sum);
@@ -58,14 +60,49 @@ final class StringCalculatorTest extends TestCase
     /**
      * @test
      */
-    public function customValidSeparators(){
+    public function doubleSlashDefinesCustomValidSeparatorsBeforeLineBreak(){
         $sum = $this->stringCalculator->add("//;\n3;10");
 
         assertEquals(13,$sum);
     }
+    /**
+     * @test
+     */
+    public function NegativeNumbersAreNotSupported(){
+        try{
+            $sum = $this->stringCalculator->add("3,-1\n-2");
+            $exception = new Exception("");
+        }catch(Exception $e){
+            $exception = $e;
+        }finally{
+            assertEquals("negativos no soportados: -1;-2;",$exception->getMessage());
+        } 
+    }
+    /**
+     * @test
+     */
+    public function NumbersGreaterThanAThousandAreIgnored(){
+        $sum = $this->stringCalculator->add("2,1001");
+
+        assertEquals(2,$sum);
+    }
+    /**
+     * @test
+     */
+    public function customValidSeparatorsOnBracketsCanBeOfVariableLength(){
+        $sum = $this->stringCalculator->add("//[***]\n1***2***3");
+
+        assertEquals(6,$sum);
+    }
+    /**
+     * @test
+     */
+    public function multipleCustomValidSeparators(){
+        $sum = $this->stringCalculator->add("//[*][%]\n1*2%3");
+
+        assertEquals(6,$sum);
+    }
 }
 /*
-4. Soporta diferentes delimitadores
-    * Para cambiar un delimitador, el comienzo del string debe contener una línea separada que sea como esta: "//[delimitador]\n[números...]". Por ejemplo: "//;\n1;2" debe dar como resultado 3 donde el delimitador por defecto es ";".
-    * La primera línea es opcional. Todos los escenarios existentes hasta ahora, deben estar soportados.
+
 */
