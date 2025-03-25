@@ -7,7 +7,6 @@ namespace Deg540\StringCalculatorPHP\Test;
 use Deg540\StringCalculatorPHP\StringCalculator;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use Throwable;
 use function PHPUnit\Framework\assertEquals;
 
 final class StringCalculatorTest extends TestCase
@@ -69,14 +68,10 @@ final class StringCalculatorTest extends TestCase
      * @test
      */
     public function NegativeNumbersAreNotSupported(){
-        try{
-            $sum = $this->stringCalculator->add("3,-1\n-2");
-            $exception = new Exception("");
-        }catch(Exception $e){
-            $exception = $e;
-        }finally{
-            assertEquals("negativos no soportados: -1;-2;",$exception->getMessage());
-        } 
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("negativos no soportados: -1;-2;");
+
+        $sum = $this->stringCalculator->add("3,-1\n-2");
     }
     /**
      * @test
