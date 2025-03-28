@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Deg540\StringCalculatorPHP\Test;
 
 use Deg540\StringCalculatorPHP\StringCalculator;
-use Exception;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertEquals;
 
